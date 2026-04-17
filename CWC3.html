@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SFA World Cup 2026 | CWC 23 Style</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+--cwc-navy: #00004d;
+--cwc-purple: #1a0033;
+--cwc-pink: #d90066;
+--cwc-yellow: #ffcc00;
+--cwc-white: #ffffff;
+--glass: rgba(255, 255, 255, 0.05);
+}
+
+body {
+font-family: 'Outfit', sans-serif;
+background: var(--cwc-navy);
+color: white;
+margin: 0;
+overflow-x: hidden;
+}
+
+/* Top Match Ticker */
+.match-ticker {
+background: #000033;
+display: flex;
+overflow-x: auto;
+border-bottom: 4px solid var(--cwc-pink);
+padding: 10px 0;
+white-space: nowrap;
+}
+
+.match-card {
+background: rgba(255,255,255,0.1);
+margin: 0 10px;
+padding: 10px 20px;
+border-radius: 4px;
+min-width: 200px;
+border-left: 3px solid var(--cwc-yellow);
+cursor: pointer;
+transition: 0.3s;
+}
+
+.match-card:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+.ticker-team { display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; }
+.ticker-score { color: var(--cwc-yellow); }
+
+/* Navigation Banner */
+nav {
+background: var(--cwc-purple);
+padding: 15px 10%;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.nav-links { display: flex; gap: 30px; }
+.nav-links button {
+background: none; border: none; color: white;
+font-weight: 700; cursor: pointer; text-transform: uppercase;
+letter-spacing: 1px; font-size: 0.85rem;
+padding-bottom: 5px;
+}
+
+.nav-links button.active { border-bottom: 3px solid var(--cwc-yellow); color: var(--cwc-yellow); }
+
+/* The Hero Section */
+.hero {
+background: linear-gradient(rgba(26, 0, 51, 0.8), rgba(26, 0, 51, 0.8)),
+url('https://www.cricketworldcup.com/resources/prod/v8.15.0/i/elements/pattern-bg.png');
+padding: 60px 10%;
+border-bottom-left-radius: 100px;
+background-size: cover;
+}
+
+h1 { font-size: 3.5rem; margin: 0; font-weight: 900; }
+.sub-header { color: var(--cwc-yellow); font-weight: bold; letter-spacing: 2px; }
+
+/* Layout Container */
+.container { padding: 40px 10%; }
+.page { display: none; animation: fadeIn 0.4s ease; }
+.page.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Table Styling */
+.cwc-table-card {
+background: white;
+border-radius: 8px;
+overflow: hidden;
+color: #000;
+box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--cwc-navy); color: var(--cwc-yellow); padding: 15px; font-size: 0.75rem; text-transform: uppercase; }
+td { padding: 20px; border-bottom: 1px solid #eee; text-align: center; }
+
+.team-cell { display: flex; align-items: center; gap: 15px; font-weight: 900; text-align: left; cursor: pointer; }
+.team-cell:hover { color: var(--cwc-pink); }
+.team-flag { width: 40px; height: 25px; background: #ddd; border-radius: 2px; }
+.points { color: var(--cwc-pink); font-weight: 900; font-size: 1.2rem; }
+
+/* Form Dots */
+.form-dot {
+display: inline-block; width: 22px; height: 22px;
+border-radius: 50%; color: white; font-weight: bold;
+line-height: 22px; font-size: 10px;
+}
+.w { background: #008000; } .l { background: #d00; } .np { background: #888; }
+
+/* Modal (Scorecard Pop-up) */
+.modal-overlay {
+    display: none; position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
+}
+.modal-content {
+    background: var(--cwc-navy); width: 90%; max-width: 600px; border-radius: 15px;
+    padding: 30px; border: 2px solid var(--cwc-pink); position: relative;
+    color: white; /* Added to keep text white inside modal */
+}
+.close-modal { position: absolute; right: 20px; top: 10px; cursor: pointer; font-size: 2rem; color: var(--cwc-yellow); }
+
+.mvp-badge {
+    background: linear-gradient(45deg, var(--cwc-yellow), #ff8800);
+    color: var(--cwc-navy); padding: 10px; border-radius: 5px;
+    font-weight: 900; display: inline-block; margin-top: 15px;
+}
+
+/* Admin Section */
+.admin-glass {
+background: rgba(255,255,255,0.1);
+backdrop-filter: blur(10px);
+padding: 30px;
+border-radius: 20px;
+border: 1px solid rgba(255,255,255,0.2);
+max-width: 500px;
+margin: auto;
+}
+
+input, select {
+width: 100%; padding: 12px; margin: 10px 0;
+background: #fff; border: none; border-radius: 5px; font-weight: bold;
+}
+
+.btn-update {
+background: var(--cwc-pink); color: white; border: none;
+padding: 15px; width: 100%; border-radius: 5px;
+font-weight: 900; cursor: pointer; margin-top: 10px;
+}
+
+/* Rainbow Animation */
+@keyframes rainbow {
+    0% { color: #ff0000; }
+    20% { color: #ff8800; }
+    40% { color: #ffff00; }
+    60% { color: #00ff00; }
+    80% { color: #0000ff; }
+    100% { color: #ff0000; }
+}
+.rainbow-leader { animation: rainbow 2s linear infinite; font-weight: 900 !important; }
+</style>
+</head>
+<body>
+
+<div class="match-ticker">
+    <div class="match-card" onclick="openScorecard(6)">
+        <div class="ticker-team"><span>Team Ashab</span> <span class="ticker-score">260/3 (15)</span></div>
+        <div class="ticker-team"><span>Team Manu</span> <span class="ticker-score">264/1 (12.4)</span></div>
+        <div style="font-size: 0.7rem; color: #aaa; margin-top:5px;">MATCH 6 • Team Manu won by 2 Wickets</div>
+    </div>
+
+    <div class="match-card" onclick="openScorecard(7)">
+        <div class="ticker-team"><span>Team Ashab</span> <span class="ticker-score">154/2 (15)</span></div>
+        <div class="ticker-team"><span>Team Manu</span> <span class="ticker-score">135/4 (13.2)</span></div>
+        <div style="font-size: 0.7rem; color: #aaa; margin-top:5px;">MATCH 7 • Team Ashab won by 19 Runs</div>
+    </div>
+</div>
+
+<nav>
+<div style="font-weight: 900; font-size: 1.5rem; letter-spacing: -1px;">
+S<span style="color:var(--cwc-pink)">FA 2026</span>
+</div>
+<div class="nav-links">
+<button onclick="show('rankings')" id="btn-rankings" class="active">Standings</button>
+<button onclick="show('players')" id="btn-players">Stats</button>
+<button onclick="adminAccess()" style="color:var(--cwc-yellow)">Admin</button>
+</div>
+</nav>
+
+<div class="hero">
+<div class="sub-header">ICC MEN'S CRICKET WORLD CUP</div>
+<h1>STANDINGS</h1>
+</div>
+
+<div class="modal-overlay" id="scorecard-modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <h2 id="m-title" style="color:var(--cwc-yellow); margin-top:0;">Match Scorecard</h2>
+        <div id="m-details" style="line-height: 1.6;"></div>
+        <div id="m-mvp" class="mvp-badge"></div>
+    </div>
+</div>
+
+<div class="container">
+<section id="rankings" class="page active">
+<div class="cwc-table-card">
+<table>
+<thead>
+<tr><th>Pos</th><th style="text-align:left">Team</th><th>P</th><th>W</th><th>L</th><th>NRR</th><th>Pts</th><th>Form</th></tr>
+</thead>
+<tbody id="t-body"></tbody>
+</table>
+</div>
+</section>
+
+<section id="players" class="page">
+<div class="cwc-table-card">
+<table>
+<thead>
+<tr><th style="text-align:left">Player</th><th>Team</th><th>Runs</th><th>Wickets</th></tr>
+</thead>
+<tbody id="p-body"></tbody>
+</table>
+</div>
+</section>
+
+<section id="admin" class="page">
+<div class="admin-glass">
+<h2 style="margin-top:0">Update Center</h2>
+<select id="mode" onchange="toggleForm()">
+<option value="p">Player Statistics</option>
+<option value="t">Team Standings</option>
+</select>
+
+<div id="form-p">
+<select id="sel-p"></select>
+<input type="number" id="val-r" placeholder="Runs Scored">
+<input type="number" id="val-w" placeholder="Wickets Taken">
+</div>
+
+<div id="form-t" style="display:none">
+<select id="sel-t">
+<option value="T1">Team Ashab</option>
+<option value="T2">Team Manu</option>
+</select>
+<input type="number" id="val-tp" placeholder="Matches Played">
+<input type="number" id="val-tw" placeholder="Matches Won">
+<input type="text" id="val-tn" placeholder="NRR (e.g. +1.250)">
+<input type="text" id="val-tf" placeholder="Form (W, L, NP)">
+</div>
+
+<button class="btn-update" onclick="save()">SYNC STATISTICS</button>
+</div>
+</section>
+</div>
+
+<script>
+const players = [
+{id: "Ashab (C)", t: "Team Ashab"}, {id: "Yashwanth", t: "Team Ashab"}, {id: "Abbas", t: "Team Ashab"}, {id: "Farhan", t: "Team Ashab"},
+{id: "Manu (C)", t: "Team Manu"}, {id: "Siddharth", t: "Team Manu"}, {id: "Nayan", t: "Team Manu"}, {id: "Mahi", t: "Team Manu"}
+];
+
+// Mock Match Data for the Scorecards
+const matchData = {
+    6: {
+        title: "Match 6: Team Ashab vs Team Manu",
+        details: "<b>Team Ashab:</b> 260/3 (15 Overs)<br>Ashab: 128(45), Yashwanth: 34(15), Abbas: 98(48)<br><br><b>Team Manu:</b> 264/1 (12.4 Overs)<br>Siddharth: 188*(40), Nayan: 60(25), Mahi: 13(8)",
+        mvp: "🏆 MVP: Siddharth (188 Runs & 1 Wicket)"
+    },
+    7: {
+        title: "Match 7: Team Ashab vs Team Manu",
+        details: "<b>Team Ashab:</b> 154/2 (15 Overs)<br>Farhan: 26(35), Abbas: 45(20), Yashwanth: 83(23)<br><br><b>Team Manu:</b> 136/4 (13.2 Overs)<br> Siddharth: 56(12) Mahi: 50*(22), Nayan: 30(15)",
+        mvp: "🏆 MVP: Farhan (26 Runs & 3 Wickets)"
+    }
+};
+
+function openScorecard(matchId) {
+    const data = matchData[matchId];
+    document.getElementById('m-title').innerText = data.title;
+    document.getElementById('m-details').innerHTML = data.details;
+    document.getElementById('m-mvp').innerText = data.mvp;
+    document.getElementById('m-mvp').style.display = 'inline-block';
+    document.getElementById('scorecard-modal').style.display = 'flex';
+}
+
+function showTeamRoster(teamName) {
+    const roster = players.filter(p => p.t === teamName);
+    let rosterHtml = "<ul style='list-style:none; padding:0; font-size:1.1rem;'>";
+    roster.forEach(p => {
+        rosterHtml += `<li style='padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1)'>🏏 ${p.id}</li>`;
+    });
+    rosterHtml += "</ul>";
+    
+    document.getElementById('m-title').innerText = teamName + " Squad";
+    document.getElementById('m-details').innerHTML = rosterHtml;
+    document.getElementById('m-mvp').style.display = 'none';
+    document.getElementById('scorecard-modal').style.display = 'flex';
+}
+
+function closeModal() { document.getElementById('scorecard-modal').style.display = 'none'; }
+
+// Local Storage Setup
+if(!localStorage.getItem('cwc_t')) {
+localStorage.setItem('cwc_t', JSON.stringify({
+T1: {p:0, w:0, n:"0.000", f:"NP"},
+T2: {p:0, w:0, n:"0.000", f:"NP"}
+}));
+let ps = {}; players.forEach(x => ps[x.id] = {r:0, w:0});
+localStorage.setItem('cwc_p', JSON.stringify(ps));
+}
+
+function render() {
+const teams = JSON.parse(localStorage.getItem('cwc_t'));
+const ps = JSON.parse(localStorage.getItem('cwc_p'));
+
+// Render Teams
+let tH = "";
+["T1", "T2"].forEach((id, i) => {
+const d = teams[id];
+const name = id=='T1'?'Team Ashab':'Team Manu';
+const dot = d.f === 'W' ? 'w' : (d.f === 'L' ? 'l' : 'np');
+tH += `<tr>
+<td>${i+1}</td>
+<td><div class="team-cell" onclick="showTeamRoster('${name}')"><div class="team-flag" style="background:${id=='T1'?'#004ba0':'#ff8200'}"></div>${name}</div></td>
+<td>${d.p}</td><td>${d.w}</td><td>${d.p-d.w}</td><td>${d.n}</td>
+<td class="points">${d.w*2}</td>
+<td><span class="form-dot ${dot}">${d.f}</span></td>
+</tr>`;
+});
+document.getElementById('t-body').innerHTML = tH;
+
+// Render Players
+let pH = "";
+let maxRuns = 0; let maxWickets = 0;
+players.forEach(p => {
+    const s = ps[p.id] || {r:0, w:0};
+    if (parseInt(s.r) > maxRuns) maxRuns = parseInt(s.r);
+    if (parseInt(s.w) > maxWickets) maxWickets = parseInt(s.w);
+});
+
+players.forEach(p => {
+    const s = ps[p.id] || {r:0, w:0};
+    const isRunsLeader = maxRuns > 0 && parseInt(s.r) === maxRuns;
+    const isWicketsLeader = maxWickets > 0 && parseInt(s.w) === maxWickets;
+    pH += `<tr><td style="text-align:left; font-weight:900">${p.id}</td><td>${p.t}</td><td class="${isRunsLeader ? 'rainbow-leader' : ''}">${s.r}</td><td class="${isWicketsLeader ? 'rainbow-leader' : ''}">${s.w}</td></tr>`;
+});
+document.getElementById('p-body').innerHTML = pH;
+}
+
+function save() {
+const m = document.getElementById('mode').value;
+if(m === 'p') {
+const data = JSON.parse(localStorage.getItem('cwc_p'));
+const id = document.getElementById('sel-p').value;
+data[id] = { r: document.getElementById('val-r').value || 0, w: document.getElementById('val-w').value || 0 };
+localStorage.setItem('cwc_p', JSON.stringify(data));
+} else {
+const data = JSON.parse(localStorage.getItem('cwc_t'));
+const id = document.getElementById('sel-t').value;
+data[id] = { p: document.getElementById('val-tp').value || 0, w: document.getElementById('val-tw').value || 0, n: document.getElementById('val-tn').value || "0.000", f: document.getElementById('val-tf').value.toUpperCase() || "NP" };
+localStorage.setItem('cwc_t', JSON.stringify(data));
+}
+alert("Synced with Cloud"); render(); show('rankings');
+}
+
+function show(id) {
+document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+if(document.getElementById('btn-'+id)) document.getElementById('btn-'+id).classList.add('active');
+}
+
+function adminAccess() { if(prompt("Passcode?") === "nagiseishiro@12") show('admin'); }
+
+function toggleForm() {
+const m = document.getElementById('mode').value;
+document.getElementById('form-p').style.display = m === 'p' ? 'block' : 'none';
+document.getElementById('form-t').style.display = m === 't' ? 'block' : 'none';
+}
+
+const drop = document.getElementById('sel-p');
+players.forEach(p => { let o = document.createElement('option'); o.value = p.id; o.innerText = p.id; drop.appendChild(o); });
+
+render();
+</script>
+</body>
+</html>
