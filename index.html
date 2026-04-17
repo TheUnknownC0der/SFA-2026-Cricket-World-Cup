@@ -307,8 +307,8 @@ function closeModal() { document.getElementById('scorecard-modal').style.display
 // Local Storage Setup
 if(!localStorage.getItem('cwc_t')) {
 localStorage.setItem('cwc_t', JSON.stringify({
-T1: {p:0, w:0, n:"0.000", f:"NP"},
-T2: {p:0, w:0, n:"0.000", f:"NP"}
+T1: {p:7, w:5, n:"+2.564", f:"W"},
+T2: {p:7, w:2, n:"-1.854", f:"L"}
 }));
 let ps = {}; players.forEach(x => ps[x.id] = {r:0, w:0});
 localStorage.setItem('cwc_p', JSON.stringify(ps));
